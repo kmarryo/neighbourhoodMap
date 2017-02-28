@@ -23,13 +23,22 @@
 // };
 
 
-
 var NewMarker = function (name, lat, lng, title) {
     this.name = name;
     this.lat = lat;
     this.lng = lng;
     this.title = title;
 };
+
+NewMarker.prototype.toggleAnimation = function () {
+        console.log('click');
+
+        // if (this.getAnimation() !== null) {
+        //     this.setAnimation(null);
+        // } else {
+        //     this.setAnimation(google.maps.Animation.BOUNCE);
+        // }
+}
 
 
 var markers = ko.observableArray([
@@ -49,3 +58,4 @@ for (var i = 0; i < markers().length; i++) {
     });
 }
 
+ko.applyBindings(markers);

@@ -13,6 +13,10 @@
 
 <div id="map"></div>
 
+<ul data-bind="foreach: markers">
+    <li data-bind="text: name"></li>
+</ul>
+
 <script type="text/javascript">
     var map;
     function initMap() {
