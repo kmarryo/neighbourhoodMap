@@ -1,3 +1,28 @@
+var map;
+function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 48.369826, lng: 10.8969703},
+        zoom: 15
+    });
+    for (var i = 0; i < markers().length; i++) {
+        var marker = new google.maps.Marker({
+            position: {lat: markers()[i].lat, lng: markers()[i].lng},
+            map: map,
+            title: markers()[i].title
+        });
+        marker.addListener('click', function () {
+            console.log('click');
+            console.log('this', this);
+            if (this.getAnimation() !== null) {
+                this.setAnimation(null);
+            } else {
+                this.setAnimation(google.maps.Animation.BOUNCE);
+            }
+        });
+    }
+}
+
+
 // Constructor function for markers
 var NewMarker = function (name, lat, lng, title) {
     this.name = name;
@@ -26,7 +51,6 @@ var markers = ko.observableArray([
 
 
 console.log('markers().length', markers().length);
-
 
 
 ko.applyBindings(markers);
