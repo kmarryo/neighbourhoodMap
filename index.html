@@ -24,6 +24,13 @@
             center: {lat: 48.369826, lng: 10.8969703},
             zoom: 15
         });
+        for (var i = 0; i < markers().length; i++) {
+            new google.maps.Marker({
+                position: {lat: markers()[i].lat, lng: markers()[i].lng},
+                map: map,
+                title: markers()[i].title
+            });
+        }
     }
 </script>
 <script async src="js/knockout.js"></script>
