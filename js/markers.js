@@ -12,23 +12,23 @@ function initMap() {
         this.lat = lat;
         this.lng = lng;
         this.title = title;
-        self.marker = new google.maps.Marker({
+        this.marker = new google.maps.Marker({
             position: {lat: self.lat, lng: self.lng},
             map: map,
             title: self.title
         });
         // Sets Event listener for clicks when pins are clicked.
-        self.marker.addListener('click', self.toggleAnimation);
+        this.marker.addListener('click', this.toggleAnimation);
     };
 
     // Animates marker when it is clicked
     Pin.prototype.toggleAnimation = function () {
-        console.log('click');
-        if (this.getAnimation() !== null) {
-            this.setAnimation(null);
-        } else {
-            this.setAnimation(google.maps.Animation.BOUNCE);
-        }
+        var self = this;
+        this.setAnimation(google.maps.Animation.BOUNCE);
+
+        setTimeout(function () {
+            self.setAnimation(null);
+        }, 700);
     }
     // Knockout observableArray with position and infos for the markers
     var pins = ko.observableArray([
