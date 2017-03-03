@@ -1,4 +1,4 @@
-var map;
+var map, pins;
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -24,14 +24,14 @@ function initMap() {
     // Animates marker when it is clicked
     Pin.prototype.toggleAnimation = function () {
         var self = this;
-        this.setAnimation(google.maps.Animation.BOUNCE);
+        self.setAnimation(google.maps.Animation.BOUNCE);
 
         setTimeout(function () {
             self.setAnimation(null);
         }, 700);
     }
     // Knockout observableArray with position and infos for the markers
-    var pins = ko.observableArray([
+    pins = ko.observableArray([
         new Pin('townHall', 48.368821, 10.8965303, 'Rathaus'),
         new Pin('sausalitos', 48.36697, 10.8978486, 'Sausalitos'),
         new Pin('kahnfahrt', 48.37551, 10.9041863, 'Augsburger Kahnfahrt')
@@ -39,9 +39,8 @@ function initMap() {
 
 
     console.log('pins', pins);
-
-
     ko.applyBindings(pins);
+
 }
 
 
