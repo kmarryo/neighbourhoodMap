@@ -40,11 +40,11 @@ function initMap() {
         ]);
     }
 
-    console.log('pins', pins);
     ko.applyBindings(myViewModel());
 
 }
 
+console.log('pins', pins);
 
 
 
