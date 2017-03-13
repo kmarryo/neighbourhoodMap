@@ -1,4 +1,4 @@
-var map, pins;
+var map, pins, infoWindow;
 
 // Google Maps API function for initializing the map
 function initMap() {
@@ -6,7 +6,7 @@ function initMap() {
         center: {lat: 48.369826, lng: 10.8969703},
         zoom: 15
     });
-
+    infoWindow = new google.maps.InfoWindow();
     ko.applyBindings(myViewModel());
 
 }
@@ -15,9 +15,9 @@ function initMap() {
 function myViewModel() {
     // Knockout observableArray with position and infos for the markers
     var pins = ko.observableArray([
-        new Pin('townHall', 48.368821, 10.8965303, 'Rathaus', '<div class="info-window"><h1 class="info-heading">InfoWindow 1</h1><div class="info-content">Hallo, das ist mein InfoWindow</div></div>'),
-        new Pin('sausalitos', 48.36697, 10.8978486, 'Sausalitos', '<div class="info-window"><h1 class="info-heading">InfoWindow 2</h1><div class="info-content">Hallo, das ist mein InfoWindow2</div></div>'),
-        new Pin('kahnfahrt', 48.37551, 10.9041863, 'Augsburger Kahnfahrt', '<div class="info-window"><h1 class="info-heading">InfoWindow 3</h1><div class="info-content">Hallo, das ist mein InfoWindow3</div></div>')
+        new Pin('townHall', 48.368821, 10.8965303, 'Rathaus', '<div class="info-window"><h1 class="info-heading">Rathaus</h1><div class="info-content">Hallo, das ist mein InfoWindow</div></div>'),
+        new Pin('sausalitos', 48.36697, 10.8978486, 'Sausalitos', '<div class="info-window"><h1 class="info-heading">Sausalitos</h1><div class="info-content">Hallo, das ist mein InfoWindow2</div></div>'),
+        new Pin('kahnfahrt', 48.37551, 10.9041863, 'Augsburger Kahnfahrt', '<div class="info-window"><h1 class="info-heading">Kahnfahrt</h1><div class="info-content">Hallo, das ist mein InfoWindow3</div></div>')
     ]);
 
     return {
@@ -40,9 +40,6 @@ var Pin = function (name, lat, lng, title, content) {
         map: map,
         title: this.title
     });
-    this.infowindow = new google.maps.InfoWindow({
-        content: this.content
-    });;
     // Sets Event listener for clicks when pins are clicked.
     this.marker.addListener('click', function(){
         self.PinIsClicked();
@@ -59,13 +56,9 @@ Pin.prototype.PinIsClicked = function () {
         self.marker.setAnimation(null);
     }, 700);
 
-    // GMaps API infowindow
-    this.infowindow.close();
-    console.log('close info');
-    this.infowindow.open(map, this.marker);
-    console.log('open info');
-
-
+    // GMaps API infoWindow: opens infoWindow and fills it with content
+   infoWindow.open(map, this.marker);
+   infoWindow.setContent(this.content);
 
 }
 
