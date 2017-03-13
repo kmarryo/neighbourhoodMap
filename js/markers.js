@@ -13,12 +13,14 @@ function initMap() {
 
 
 function myViewModel() {
+
     // Knockout observableArray with position and infos for the markers
-    this.pins = ko.observableArray([
+    pins = ko.observableArray([
         new Pin('townHall', 48.368821, 10.8965303, 'Rathaus', '<div class="info-window"><h1 class="info-heading">Rathaus</h1><div class="info-content">Hallo, das ist mein InfoWindow</div></div>'),
         new Pin('sausalitos', 48.36697, 10.8978486, 'Sausalitos', '<div class="info-window"><h1 class="info-heading">Sausalitos</h1><div class="info-content">Hallo, das ist mein InfoWindow2</div></div>'),
         new Pin('kahnfahrt', 48.37551, 10.9041863, 'Augsburger Kahnfahrt', '<div class="info-window"><h1 class="info-heading">Kahnfahrt</h1><div class="info-content">Hallo, das ist mein InfoWindow3</div></div>')
     ]);
+    console.log('pins()', pins());
 
 }
 
@@ -38,7 +40,7 @@ var Pin = function (name, lat, lng, title, content) {
         title: this.title
     });
     // Sets Event listener for clicks when pins are clicked.
-    this.marker.addListener('click', function(){
+    this.marker.addListener('click', function () {
         self.PinIsClicked();
     });
     this.search = this.search();
@@ -63,11 +65,8 @@ Pin.prototype.PinIsClicked = function () {
 
 Pin.prototype.search = function () {
     var self = this;
-    $( "#tags" ).autocomplete({
-        source: this.title.toLowerCase()
-    });
-    console.log('this.title', this.title);
-    
+
+
 }
 
 

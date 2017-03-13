@@ -15,13 +15,20 @@
 
 <div id="map"></div>
 
-<ul data-bind="foreach: this.pins">
+<ul data-bind="foreach: pins">
     <li data-bind="text: name, click: PinIsClicked"></li>
 </ul>
 
-<div class="ui-widget">
-    <label for="tags">Search: </label>
-    <input id="tags">
+
+
+
+<div class="search-box">
+    <h3>Search:</h3>
+<input type="text" data-bind="value: textSearch, valueUpdate: 'keyup'" placeholder="Search">
+    <h3>Search results:</h3>
+    <ul data-bind="foreach: searchResults">
+        <li data-bind="text: name"></li>
+    </ul>
 </div>
 
 <script type="text/javascript">
@@ -30,7 +37,6 @@
 
 <script src="js/knockout.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
 <script async src="js/markers.js"></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYBvG6EFg7PrPKo7yo_VP3NWRd-3C-Bho&callback=initMap"></script>
