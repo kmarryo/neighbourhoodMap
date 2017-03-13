@@ -1,6 +1,11 @@
 // GLOBAL Variables
 var map, pins, infoWindow, myViewModel;
 
+if(typeof google !== 'undefined' || typeof initMap() !== 'function') {
+    $('body').text('Sorry, but the map you are looking for could not be loaded. Please try again later.')
+}
+
+
 // Google Maps API function for initializing the map
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -91,4 +96,3 @@ function initMap() {
     ko.applyBindings(myViewModel);
 
 }
-

@@ -15,19 +15,13 @@
 
 <div id="map"></div>
 
-<ul data-bind="foreach: pins">
-    <li data-bind="text: name, click: PinIsClicked"></li>
-</ul>
-
-
-
 
 <div class="search-box">
     <h3>Search:</h3>
 <input type="text" data-bind="value: filter, valueUpdate: 'afterkeydown'" placeholder="Search">
     <h3>Search results:</h3>
     <ul data-bind="foreach: filteredItems">
-        <li data-bind="text: name"></li>
+        <li data-bind="text: name, click: PinIsClicked"></li>
     </ul>
 </div>
 
