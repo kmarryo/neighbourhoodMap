@@ -24,9 +24,9 @@
 
 <div class="search-box">
     <h3>Search:</h3>
-<input type="text" data-bind="value: textSearch, valueUpdate: 'keyup'" placeholder="Search">
+<input type="text" data-bind="value: filter, valueUpdate: 'afterkeydown'" placeholder="Search">
     <h3>Search results:</h3>
-    <ul data-bind="foreach: searchResults">
+    <ul data-bind="foreach: filteredItems">
         <li data-bind="text: name"></li>
     </ul>
 </div>
