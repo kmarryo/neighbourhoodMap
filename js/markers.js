@@ -14,15 +14,12 @@ function initMap() {
 
 function myViewModel() {
     // Knockout observableArray with position and infos for the markers
-    var pins = ko.observableArray([
+    this.pins = ko.observableArray([
         new Pin('townHall', 48.368821, 10.8965303, 'Rathaus', '<div class="info-window"><h1 class="info-heading">Rathaus</h1><div class="info-content">Hallo, das ist mein InfoWindow</div></div>'),
         new Pin('sausalitos', 48.36697, 10.8978486, 'Sausalitos', '<div class="info-window"><h1 class="info-heading">Sausalitos</h1><div class="info-content">Hallo, das ist mein InfoWindow2</div></div>'),
         new Pin('kahnfahrt', 48.37551, 10.9041863, 'Augsburger Kahnfahrt', '<div class="info-window"><h1 class="info-heading">Kahnfahrt</h1><div class="info-content">Hallo, das ist mein InfoWindow3</div></div>')
     ]);
 
-    return {
-        pins: pins
-    };
 }
 
 
@@ -44,6 +41,7 @@ var Pin = function (name, lat, lng, title, content) {
     this.marker.addListener('click', function(){
         self.PinIsClicked();
     });
+    this.search = this.search();
 };
 // In this function everything is stored what happens after click on the markers or the list items
 Pin.prototype.PinIsClicked = function () {
@@ -57,9 +55,19 @@ Pin.prototype.PinIsClicked = function () {
     }, 700);
 
     // GMaps API infoWindow: opens infoWindow and fills it with content
-   infoWindow.open(map, this.marker);
-   infoWindow.setContent(this.content);
+    infoWindow.setContent(this.content);
 
+    infoWindow.open(map, this.marker);
+
+}
+
+Pin.prototype.search = function () {
+    var self = this;
+    $( "#tags" ).autocomplete({
+        source: this.title.toLowerCase()
+    });
+    console.log('this.title', this.title);
+    
 }
 
 
