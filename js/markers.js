@@ -1,4 +1,5 @@
-var map, pins, infoWindow, viewModel;
+// GLOBAL Variables
+var map, pins, infoWindow, myViewModel;
 
 // Google Maps API function for initializing the map
 function initMap() {
@@ -7,22 +8,6 @@ function initMap() {
         zoom: 15
     });
     infoWindow = new google.maps.InfoWindow();
-
-
-
-//
-// function myViewModel() {
-//
-//     // Knockout observableArray with position and infos for the markers
-//     pins = ko.observableArray([
-//         new Pin('townHall', 48.368821, 10.8965303, 'Rathaus', '<div class="info-window"><h1 class="info-heading">Rathaus</h1><div class="info-content">Hallo, das ist mein InfoWindow</div></div>'),
-//         new Pin('sausalitos', 48.36697, 10.8978486, 'Sausalitos', '<div class="info-window"><h1 class="info-heading">Sausalitos</h1><div class="info-content">Hallo, das ist mein InfoWindow2</div></div>'),
-//         new Pin('kahnfahrt', 48.37551, 10.9041863, 'Augsburger Kahnfahrt', '<div class="info-window"><h1 class="info-heading">Kahnfahrt</h1><div class="info-content">Hallo, das ist mein InfoWindow3</div></div>')
-//     ]);
-//     console.log('pins()', pins());
-//
-// }
-
 
 // Pin constructor
 
@@ -33,6 +18,7 @@ function initMap() {
         this.lng = lng;
         this.title = title;
         this.content = content;
+        // Creates the pins (markers)
         this.marker = new google.maps.Marker({
             position: {lat: this.lat, lng: this.lng},
             map: map,
@@ -42,10 +28,7 @@ function initMap() {
         this.marker.addListener('click', function () {
             self.PinIsClicked();
         });
-        this.search = this.search();
     };
-
-
 
 
 // In this function everything is stored what happens after click on the markers or the list items
@@ -66,14 +49,12 @@ function initMap() {
 
     }
 
-    Pin.prototype.search = function () {
-        var self = this;
 
 
-    }
-
-
-    viewModel = {
+// Knockout JS ViewModel
+    myViewModel = {
+        // Create markers (pins) via Pin constructor
+        // General structure: new Pin(name, lat, lng, title, content)
         pins: ko.observableArray([
             new Pin('townHall', 48.368821, 10.8965303, 'Rathaus', '<div class="info-window"><h1 class="info-heading">Rathaus</h1><div class="info-content">Hallo, das ist mein InfoWindow</div></div>'),
             new Pin('sausalitos', 48.36697, 10.8978486, 'Sausalitos', '<div class="info-window"><h1 class="info-heading">Sausalitos</h1><div class="info-content">Hallo, das ist mein InfoWindow2</div></div>'),
@@ -82,23 +63,32 @@ function initMap() {
         search: ko.observable("")
     };
 
-//ko.utils.arrayFilter - filter the items using the filter text
-    viewModel.filteredItems = ko.dependentObservable(function() {
-        var filter = this.filter().toLowerCase();
-        if (!filter) {
+// Enhance myViewModel for filtering the input search
+    myViewModel.filteredItems = ko.dependentObservable(function() {
+        // Helper function stringStartsWith replaces the deprecated ko.utils.stringStartsWith
+        var stringStartsWith = function (string, startsWith) {
+            string = string || "";
+            if (startsWith.length > string.length)
+                return false;
+            return string.substring(0, startsWith.length) === startsWith;
+        };
+
+        // Creating filter, set all letters to lowercase for usability
+        var pinFilter = this.filter().toLowerCase();
+        if (pinFilter === false) {
             return this.pins();
         } else {
             return ko.utils.arrayFilter(this.pins(), function(pin) {
-                return ko.utils.stringStartsWith(pin.name().toLowerCase(), filter);
+                return stringStartsWith(pin.name().toLowerCase(), pinFilter);
             });
         }
-    }, viewModel);
+    }, myViewModel);
 
 
 
 
-
-    ko.applyBindings(viewModel);
+// Execute Knockout JS and apply the bindings
+    ko.applyBindings(myViewModel);
 
 }
 
