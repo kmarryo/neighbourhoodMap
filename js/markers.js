@@ -48,9 +48,11 @@ function initMap() {
             self.marker.setAnimation(null);
         }, 700);
 
-        // GMaps API infoWindow: opens infoWindow and fills it with content
-        infoWindow.setContent(this.content);
+        //infoWindow.setContent(this.content + this.loadWikiArticles());
 
+        // GMaps API infoWindow: opens infoWindow and fills it with content
+        //infoWindow.setContent(this.content);
+        this.loadWikiArticles();
         infoWindow.open(map, this.marker);
 
     }
@@ -90,7 +92,52 @@ function initMap() {
     }, myViewModel);
 
 
+
+
+    //// API Copy from previous project on gitlab
+    Pin.prototype.loadWikiArticles = function () {
+        var self = this;
+
+        var $wikiElem = $('#wikipedia-links');
+        // clear out old data before new request
+        $wikiElem.text("");
+        // Wikipedia API
+        $.ajax({
+            url: "https://de.wikipedia.org/w/api.php?action=opensearch",
+            dataType: "jsonp",
+            data: {
+                action: "query",
+                list: "search",
+                jsonp: "callback",
+                srsearch: self.name(),
+                format: "json"
+            },
+            success: function (data) {
+                console.log('The request was successfully loaded');
+
+                var wikiLength = data.query.search;
+                var infoWindowContent;
+                for (var i = 0; i < wikiLength.length; i++) {
+                    var wikiArticle = wikiLength[i];
+                    var url = "http://de.wikipedia.org/wiki/" + wikiArticle.title;
+                    var wikiLinks = $("#wikipedia-links");
+                    infoWindowContent += '<p>' + '<a href="' + url + '">' + wikiArticle.title + '</a></p>'
+                }
+                infoWindow.setContent('<h2>' + self.name() + '</h2>' + infoWindowContent);
+            }
+        }).fail(function () {
+            $('body').text('Ooops, no data could be loaded. Please try again later.');
+        });
+        return false;
+    };
+    
+
 // Execute Knockout JS and apply the bindings
     ko.applyBindings(myViewModel);
 
 }
+
+/////////
+/////////
+/////////
+
