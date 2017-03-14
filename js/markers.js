@@ -1,7 +1,8 @@
 // GLOBAL Variables
 var map, pins, infoWindow, myViewModel;
 
-if(typeof google !== 'undefined' || typeof initMap() !== 'function') {
+// Function with error message. Gets called in index.html as onerror on Google Maps script-Tag
+function mapsError() {
     $('body').text('Sorry, but the map you are looking for could not be loaded. Please try again later.')
 }
 
@@ -55,7 +56,6 @@ function initMap() {
     }
 
 
-
 // Knockout JS ViewModel
     myViewModel = {
         // Create markers (pins) via Pin constructor
@@ -69,7 +69,7 @@ function initMap() {
     };
 
 // Enhance myViewModel for filtering the input search
-    myViewModel.filteredItems = ko.dependentObservable(function() {
+    myViewModel.filteredItems = ko.dependentObservable(function () {
         // Helper function stringStartsWith replaces the deprecated ko.utils.stringStartsWith
         var stringStartsWith = function (string, startsWith) {
             string = string || "";
@@ -83,13 +83,11 @@ function initMap() {
         if (pinFilter === false) {
             return this.pins();
         } else {
-            return ko.utils.arrayFilter(this.pins(), function(pin) {
+            return ko.utils.arrayFilter(this.pins(), function (pin) {
                 return stringStartsWith(pin.name().toLowerCase(), pinFilter);
             });
         }
     }, myViewModel);
-
-
 
 
 // Execute Knockout JS and apply the bindings
