@@ -7,30 +7,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Augsburg Neighbourhood Map</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Days+One|Rock+Salt" rel="stylesheet">
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-<h1>Augsburg Neighbourhood Map</h1>
+<section class="map-section">
+<div class="heading"><h1><span class="aux rotate">Aux</span><span class="burg">burg</span></h1></div>
 
 <div id="map"></div>
-
+</section>
+<section class="search-section">
 
 <div class="search-box">
     <h3>Search:</h3>
-<input type="text" data-bind="value: filter, valueUpdate: 'afterkeydown'" placeholder="Search">
-    <h3>Search results:</h3>
-    <ul data-bind="foreach: filteredItems">
+<input type="text" data-bind="value: filter, valueUpdate: 'afterkeydown'" placeholder="Search...">
+    <ul class="search-results" data-bind="foreach: filteredItems">
         <li data-bind="text: name, click: PinIsClicked"></li>
     </ul>
 </div>
+</section>
 
-
-<div id="wikipedia-links"></div>
-
-<script type="text/javascript">
-
-</script>
 
 <script src="js/knockout.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>

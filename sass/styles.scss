@@ -1,3 +1,10 @@
+/* Variables */
+$background-color-primary: #c2d6d6;
+$heading-font: 'Days One', sans-serif;
+$standard-font: 'Rock Salt', cursive;
+
+
+/// GENERAL
 * {
   box-sizing: border-box;
 }
@@ -7,8 +14,156 @@ html, body {
   margin: 0;
   padding: 0;
 }
-#map {
-  width: 1000px;
-  height: 750px;
-  margin: 0 auto;
+body {
+  background-color: $background-color-primary;
+}
+
+/// MAP
+
+.map-section {
+  width: 100%;
+  max-width: 1000px;
+  #map {
+    width: 100%;
+    height: 50vh;
+    max-height: 750px;
+  }
+}
+
+
+//// MAIN HEADING (h1 Auxburg)
+.heading {
+  position: relative;
+  text-align: center;
+  h1 {
+    font-family: $heading-font;
+    font-style: italic;
+    font-size: 3rem;
+    margin: 1.5rem 0;
+    text-transform: uppercase;
+    color: $background-color-primary;
+    text-shadow: 0 -2px #fff, 2px 0 #fff, 0 2px #fff, -2px 0 #fff;
+  }
+}
+
+//// SEARCH ///
+.search-box {
+  font-family: $standard-font;
+  width: 100%;
+  height: 50vh;
+  min-height: 250px;
+  color: #fff;
+  background-color: rgba(51, 77, 77, 0.9);
+  .search-results {
+    width: 75%;
+    margin: 2rem auto;
+    text-align: center;
+    li {
+      display: inline-block;
+      padding-right: 2rem;
+      padding-bottom: 2rem;
+      &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
+    }
+  }
+  h3 {
+    margin-top: 0;
+    padding-top: 1.5rem;
+    text-align: center;
+    font-size: 2.5rem;
+  }
+  input {
+    margin: 0 auto;
+    padding-left: 0.5rem;
+    display: block;
+  }
+}
+
+
+
+/* Helper Rules */
+
+
+
+
+
+/************
+MEDIA QUERIES
+ ***********/
+
+@media only screen and (min-width: 768px) {
+
+  .heading {
+    height: 100px;
+    position: relative;
+    h1 {
+      font-size: 6rem;
+      margin: 0;
+    }
+    .aux {
+      display: inline-block;
+      position: absolute;
+      top: 490px;
+      left: -60px;
+    }
+    .burg {
+      position: absolute;
+      left: 115px;
+    }
+  }
+
+  /// MAP
+  .map-section {
+    width: 80%;
+    #map {
+      margin-left: 120px;
+      margin-top: 20px;
+    }
+  }
+
+
+
+  //// SEARCH ///
+  .search-box {
+    position: absolute;
+    width: 20%;
+    height: 100vh;
+    top: 0;
+    right: 0;
+  }
+
+
+
+  /* Helper Rules */
+  .rotate {
+
+    transform: rotate(-90deg);
+
+    /* Safari */
+    -webkit-transform: rotate(-90deg);
+
+    /* Firefox */
+    -moz-transform: rotate(-90deg);
+
+    /* IE */
+    -ms-transform: rotate(-90deg);
+
+    /* Opera */
+    -o-transform: rotate(-90deg);
+
+    /* Internet Explorer */
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+
+  }
+
+  @media only screen and (max-width: 1274px) {
+    .map-section {
+      #map {
+        max-width: 800px;
+      }
+    }
+  }
+
 }

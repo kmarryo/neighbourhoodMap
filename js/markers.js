@@ -15,7 +15,14 @@ function initMap() {
         zoom: 15,
         styles: pinStyles
     });
+    // Create new and empty infoWindow. Gets populated with content under Pin.prototype.loadWikiArticles
     infoWindow = new google.maps.InfoWindow();
+
+    // Gets map responsive so it centers when the window is resized
+    var centerMap = map.getCenter();
+    google.maps.event.addDomListener(window, 'resize', function() {
+        map.setCenter(centerMap);
+    });
 
 // Pin constructor
 
