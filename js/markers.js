@@ -12,7 +12,7 @@ function mapsError() {
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 48.369826, lng: 10.8969703},
-        zoom: 15,
+        zoom: 13,
         styles: pinStyles
     });
     // Create new and empty infoWindow. Gets populated with content under Pin.prototype.loadWikiArticles
@@ -26,18 +26,16 @@ function initMap() {
 
 // Pin constructor
 
-    var Pin = function (name, lat, lng, title, content) {
+    var Pin = function (name, lat, lng) {
         var self = this;
         this.name = ko.observable(name);
         this.lat = lat;
         this.lng = lng;
-        this.title = title;
-        this.content = content;
         // Creates the pins (markers)
         this.marker = new google.maps.Marker({
             position: {lat: this.lat, lng: this.lng},
             map: map,
-            title: this.title
+            title: this.name
         });
         // Sets Event listener for clicks when pins are clicked.
         this.marker.addListener('click', function () {
@@ -70,11 +68,19 @@ function initMap() {
 // Knockout JS ViewModel
     myViewModel = {
         // Create markers (pins) via Pin constructor
-        // General structure: new Pin(name, lat, lng, title, content)
+        // General structure: new Pin(name, lat, lng)
         pins: ko.observableArray([
-            new Pin('townHall', 48.368821, 10.8965303, 'Rathaus', '<div class="info-window"><h1 class="info-heading">Rathaus</h1><div class="info-content">Hallo, das ist mein InfoWindow</div></div>'),
-            new Pin('sausalitos', 48.36697, 10.8978486, 'Sausalitos', '<div class="info-window"><h1 class="info-heading">Sausalitos</h1><div class="info-content">Hallo, das ist mein InfoWindow2</div></div>'),
-            new Pin('kahnfahrt', 48.37551, 10.9041863, 'Augsburger Kahnfahrt', '<div class="info-window"><h1 class="info-heading">Kahnfahrt</h1><div class="info-content">Hallo, das ist mein InfoWindow3</div></div>')]),
+            new Pin('Rathaus Augsburg', 48.368821, 10.8965303),
+            new Pin('Augsburger Kahnfahrt', 48.37551, 10.9041863),
+            new Pin('WWK-Arena (FC Augsburg)', 48.323186, 10.8832343),
+            new Pin('Hoher Dom zu Augsburg', 48.372679, 10.8948273),
+            new Pin('Gymnasium bei St. Stephan Augsburg', 48.376266, 10.8970563),
+            new Pin('Augsburger Puppenkiste', 48.359926, 10.9033483),
+            new Pin('Zoo Augsburg', 48.346959, 10.9174663),
+            new Pin('Messe Augsburg', 48.338652, 10.8930013),
+            new Pin('Parktheater im Kurhaus Göggingen', 48.34172, 10.8687353),
+            new Pin('Flughafen Augsburg', 48.424266, 10.9306523)
+        ]),
         filter: ko.observable(""),
         search: ko.observable("")
     };
@@ -90,12 +96,12 @@ function initMap() {
         };
 
         // Creating filter, set all letters to lowercase for usability
-        var pinFilter = this.filter().toLowerCase();
-        if (pinFilter === false) {
+        var filter = this.filter().toLowerCase();
+        if (filter === false) {
             return this.pins();
         } else {
             return ko.utils.arrayFilter(this.pins(), function (pin) {
-                return stringStartsWith(pin.name().toLowerCase(), pinFilter);
+                return stringStartsWith(pin.name().toLowerCase(), filter);
             });
         }
     }, myViewModel);
@@ -115,16 +121,17 @@ function initMap() {
             dataType: "jsonp",
             data: {
                 action: "query",
-                list: "geosearch",
+                list: "search",
                 jsonp: "callback",
-                gscoord: self.lat + '|' + self.lng,
-                gsradius: 250,
+                srsearch: self.name,
+                //gscoord: self.lat + '|' + self.lng,
+                //gsradius: 250,
                 format: "json"
             },
             success: function (data) {
                 console.log('The request was successfully loaded');
 
-                var wikiResults = data.query.geosearch;
+                var wikiResults = data.query.search;
                 var infoWindowContent = '<h2>' + self.name() + '</h2>';
                 for (var i = 0; i < 3; i++) {
                     var wikiArticle = wikiResults[i];
@@ -144,8 +151,3 @@ function initMap() {
     ko.applyBindings(myViewModel);
 
 }
-
-/////////
-/////////
-/////////
-
