@@ -93,7 +93,6 @@ function initMap() {
 
 
 
-
     //// API Copy from previous project on gitlab
     Pin.prototype.loadWikiArticles = function () {
         var self = this;
@@ -107,23 +106,23 @@ function initMap() {
             dataType: "jsonp",
             data: {
                 action: "query",
-                list: "search",
+                list: "geosearch",
                 jsonp: "callback",
-                srsearch: self.name(),
+                gscoord: self.lat + '|' + self.lng,
+                gsradius: 250,
                 format: "json"
             },
             success: function (data) {
                 console.log('The request was successfully loaded');
 
-                var wikiLength = data.query.search;
-                var infoWindowContent;
-                for (var i = 0; i < wikiLength.length; i++) {
-                    var wikiArticle = wikiLength[i];
+                var wikiResults = data.query.geosearch;
+                var infoWindowContent = '<h2>' + self.name() + '</h2>';
+                for (var i = 0; i < 3; i++) {
+                    var wikiArticle = wikiResults[i];
                     var url = "http://de.wikipedia.org/wiki/" + wikiArticle.title;
-                    var wikiLinks = $("#wikipedia-links");
-                    infoWindowContent += '<p>' + '<a href="' + url + '">' + wikiArticle.title + '</a></p>'
+                    infoWindowContent += '<p>' + '<a href="' + url + '">' + wikiArticle.title + '</a></p>';
                 }
-                infoWindow.setContent('<h2>' + self.name() + '</h2>' + infoWindowContent);
+                infoWindow.setContent(infoWindowContent);
             }
         }).fail(function () {
             $('body').text('Ooops, no data could be loaded. Please try again later.');
