@@ -1,10 +1,54 @@
-"use strict";
+'use strict';
 
 //////// GLOBAL Variables
 var map, pins, infoWindow, myViewModel;
 
 // Special stylings for map
-var pinStyles = [{"featureType":"all","elementType":"geometry.fill","stylers":[{"weight":"2.00"}]},{"featureType":"all","elementType":"geometry.stroke","stylers":[{"color":"#9c9c9c"}]},{"featureType":"all","elementType":"labels.text","stylers":[{"visibility":"on"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"landscape","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road","elementType":"geometry.fill","stylers":[{"color":"#eeeeee"}]},{"featureType":"road","elementType":"labels.text.fill","stylers":[{"color":"#7b7b7b"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#46bcec"},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#c8d7d4"}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#070707"}]},{"featureType":"water","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"}]}];
+var pinStyles = [{
+    "featureType": "all",
+    "elementType": "geometry.fill",
+    "stylers": [{"weight": "2.00"}]
+}, {"featureType": "all", "elementType": "geometry.stroke", "stylers": [{"color": "#9c9c9c"}]}, {
+    "featureType": "all",
+    "elementType": "labels.text",
+    "stylers": [{"visibility": "on"}]
+}, {"featureType": "landscape", "elementType": "all", "stylers": [{"color": "#f2f2f2"}]}, {
+    "featureType": "landscape",
+    "elementType": "geometry.fill",
+    "stylers": [{"color": "#ffffff"}]
+}, {
+    "featureType": "landscape.man_made",
+    "elementType": "geometry.fill",
+    "stylers": [{"color": "#ffffff"}]
+}, {"featureType": "poi", "elementType": "all", "stylers": [{"visibility": "off"}]}, {
+    "featureType": "road",
+    "elementType": "all",
+    "stylers": [{"saturation": -100}, {"lightness": 45}]
+}, {"featureType": "road", "elementType": "geometry.fill", "stylers": [{"color": "#eeeeee"}]}, {
+    "featureType": "road",
+    "elementType": "labels.text.fill",
+    "stylers": [{"color": "#7b7b7b"}]
+}, {
+    "featureType": "road",
+    "elementType": "labels.text.stroke",
+    "stylers": [{"color": "#ffffff"}]
+}, {
+    "featureType": "road.highway",
+    "elementType": "all",
+    "stylers": [{"visibility": "simplified"}]
+}, {
+    "featureType": "road.arterial",
+    "elementType": "labels.icon",
+    "stylers": [{"visibility": "off"}]
+}, {"featureType": "transit", "elementType": "all", "stylers": [{"visibility": "off"}]}, {
+    "featureType": "water",
+    "elementType": "all",
+    "stylers": [{"color": "#46bcec"}, {"visibility": "on"}]
+}, {"featureType": "water", "elementType": "geometry.fill", "stylers": [{"color": "#c8d7d4"}]}, {
+    "featureType": "water",
+    "elementType": "labels.text.fill",
+    "stylers": [{"color": "#070707"}]
+}, {"featureType": "water", "elementType": "labels.text.stroke", "stylers": [{"color": "#ffffff"}]}];
 
 // Function with error message. Gets called in index.html as onerror on Google Maps script-Tag
 function mapsError() {
@@ -24,7 +68,7 @@ function initMap() {
 
     // Gets map responsive so it centers when the window is resized
     var centerMap = map.getCenter();
-    google.maps.event.addDomListener(window, 'resize', function() {
+    google.maps.event.addDomListener(window, 'resize', function () {
         map.setCenter(centerMap);
     });
 
@@ -83,42 +127,22 @@ function initMap() {
             new Pin('Parktheater im Kurhaus Göggingen', 48.34172, 10.8687353),
             new Pin('Flughafen Augsburg', 48.424266, 10.9306523)
         ]),
-        filter: ko.observable(""),
-        search: ko.observable("")
+        filter: ko.observable(''),
+        search: ko.observable('')
     };
 
-// Enhance myViewModel for filtering the input search
-    myViewModel.filteredItems = ko.dependentObservable(function () {
-        // Helper function stringStartsWith replaces the deprecated ko.utils.stringStartsWith
-        var stringStartsWith = function (string, startsWith) {
-            string = string || "";
-            if (startsWith.length > string.length)
-                return false;
-            return string.substring(0, startsWith.length) === startsWith;
-        };
-        // Checks for generally matching strings
-        var stringInString = function (string, filterString) {
-            string = string || "";
-            if (filterString.length > string.length)
-                return false;
-            return string.indexOf(filterString) >= 0;
-        };
-
-        // Creating filter
+    myViewModel.filteredItems = ko.computed(function () {
         var filter = this.filter().toLowerCase();
-        if (filter === false) {
-            return this.pins();
-        } else {
-            return ko.utils.arrayFilter(this.pins(), function (pin) {
-                var stay_visible_by_str_starts = stringStartsWith(pin.name().toLowerCase(), filter);
-                var stay_visible_by_str_in_str = stringInString(pin.name().toLowerCase(), filter);
-                var stay_visible = stay_visible_by_str_starts || stay_visible_by_str_in_str;
-                // Adds or removes markers (visibility) depending on search result
-                pin.marker.setVisible(stay_visible);
-                return stay_visible;
+
+        return ko.utils.arrayFilter(this.pins(), function (pin) {
+                var visible = pin.name().toLowerCase().indexOf(filter) !== -1;
+                // Sets visibility of pins depending on search term
+                pin.marker.setVisible(visible);
+                // Returns list items that match with search term
+                return visible;
             });
-        }
     }, myViewModel);
+
 
 
 
@@ -128,16 +152,16 @@ function initMap() {
         // Wikipedia API
         // To change between normal search for terms and geosearch change list to "geosearch" and uncomment the lines gscoord and gsradius
         $.ajax({
-            url: "https://de.wikipedia.org/w/api.php?action=opensearch",
-            dataType: "jsonp",
+            url: 'https://de.wikipedia.org/w/api.php?action=opensearch',
+            dataType: 'jsonp',
             data: {
-                action: "query",
-                list: "search",
-                jsonp: "callback",
+                action: 'query',
+                list: 'search',
+                jsonp: 'callback',
                 srsearch: self.name,
                 //gscoord: self.lat + '|' + self.lng,
                 //gsradius: 250,
-                format: "json"
+                format: 'json'
             },
             success: function (data) {
                 var wikiResults = data.query.search;
@@ -146,7 +170,7 @@ function initMap() {
                 // For better usability I reduced the number of articles to 3. To show more, it can be of course replaced by wikiResults.length
                 for (var i = 0; i < 3; i++) {
                     var wikiArticle = wikiResults[i];
-                    var url = "http://de.wikipedia.org/wiki/" + wikiArticle.title;
+                    var url = 'http://de.wikipedia.org/wiki/' + wikiArticle.title;
                     infoWindowContent += '<p>' + '<a href="' + url + '">' + wikiArticle.title + '</a></p>';
                 }
                 infoWindow.setContent(infoWindowContent);
