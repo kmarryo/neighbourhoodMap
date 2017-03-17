@@ -65,7 +65,14 @@ function initMap() {
         infoWindow.open(map, this.marker);
 
     }
-
+    Pin.prototype.toggleShow = function (show) {
+        this.show(show);
+        if (show) {
+            this.marker.setVisible(true);
+        } else {
+            this.marker.setVisible(false);
+        }
+    };
 
 // Knockout JS ViewModel
     myViewModel = {
