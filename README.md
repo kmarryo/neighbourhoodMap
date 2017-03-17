@@ -35,7 +35,7 @@ As you can see, depending on your device, there is a search bar on the right han
 
 ## Click on the markers
 
-On click, the markers will show what is located there (for example town hall Augsburg) and also three related articles which you can find on wikipedia. The content is automatically filled via the wikipedia API. So it is possible for you to automatically get the best fitting results depending on the location you are looking for and straight get to the matching wikipedia article just by clicking on them.
+On click, the markers will animate (bounce) and an info window opens. In the info window is shown what is located there (for example town hall Augsburg) and also three related articles which you can find on wikipedia. The content is automatically filled via the wikipedia API. So it is possible for you to automatically get the best fitting results depending on the location you are looking for and straight get to the matching wikipedia article just by clicking on them.
 
 ## Additional infos
 The application is designed to work responsive. Therefore you can use it on mobile devices as well as on big screens.
