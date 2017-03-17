@@ -1,7 +1,7 @@
 'use strict';
 
 //////// GLOBAL Variables
-var map, pins, infoWindow, myViewModel;
+var map, infoWindow, myViewModel;
 
 // Special stylings for map
 var pinStyles = [{
@@ -52,7 +52,10 @@ var pinStyles = [{
 
 // Function with error message. Gets called in index.html as onerror on Google Maps script-Tag
 function mapsError() {
-    $('body').text('Sorry, but the map you are looking for could not be loaded. Please try again later.')
+    // if gmaps fails to load show this error message
+    if (typeof google != 'object') {
+        $('#map').append("<h2>Sorry, but the map you are looking for could not be loaded. Please try again later.</h2>");
+    }
 }
 
 
@@ -109,7 +112,7 @@ function initMap() {
         this.loadWikiArticles();
         infoWindow.open(map, this.marker);
 
-    }
+    };
 
 ////////// Knockout JS ViewModel
     myViewModel = {
@@ -125,7 +128,7 @@ function initMap() {
             new Pin('Zoo Augsburg', 48.346959, 10.9174663),
             new Pin('Messe Augsburg', 48.338652, 10.8930013),
             new Pin('Parktheater im Kurhaus Göggingen', 48.34172, 10.8687353),
-            new Pin('Flughafen Augsburg', 48.424266, 10.9306523)
+            new Pin('', 48.424266, 10.9306523)
         ]),
         filter: ko.observable(''),
         search: ko.observable('')
@@ -135,15 +138,13 @@ function initMap() {
         var filter = this.filter().toLowerCase();
 
         return ko.utils.arrayFilter(this.pins(), function (pin) {
-                var visible = pin.name().toLowerCase().indexOf(filter) !== -1;
-                // Sets visibility of pins depending on search term
-                pin.marker.setVisible(visible);
-                // Returns list items that match with search term
-                return visible;
-            });
+            var visible = pin.name().toLowerCase().indexOf(filter) !== -1;
+            // Sets visibility of pins depending on search term
+            pin.marker.setVisible(visible);
+            // Returns list items that match with search term
+            return visible;
+        });
     }, myViewModel);
-
-
 
 
     //// Wikipedia API: Populates infoWindow of pins
@@ -166,23 +167,28 @@ function initMap() {
                 format: 'json'
             },
             success: function (data) {
-
-                var wikiResults = data.query.search;
-                // Loop through wikipedia results and create paragraphs with the wiki articles inside infoWindow
-                // For better usability I reduced the number of articles to 3. To show more, it can be of course replaced by wikiResults.length
-                for (var i = 0; i < 3; i++) {
-                    var wikiArticle = wikiResults[i];
-                    var url = 'http://de.wikipedia.org/wiki/' + wikiArticle.title;
-                    infoWindowContent += '<p>' + '<a href="' + url + '">' + wikiArticle.title + '</a></p>';
+                if (typeof data !== 'undefined' && typeof data.query !== 'undefined' && typeof data.query.search === 'object') {
+                    var wikiResults = data.query.search;
+                    // Loop through wikipedia results and create paragraphs with the wiki articles inside infoWindow
+                    // For better usability I reduced the number of articles to 3. To show more, it can be of course replaced by wikiResults.length
+                    for (var i = 0; i < 3; i++) {
+                        var wikiArticle = wikiResults[i];
+                        var url = 'http://de.wikipedia.org/wiki/' + wikiArticle.title;
+                        infoWindowContent += '<p>' + '<a href="' + url + '">' + wikiArticle.title + '</a></p>';
+                    }
+                    infoWindow.setContent(infoWindowContent);
+                } else {
+                    infoWindowContent = '<p>Sorry, no data for this location could be found.</p>';
+                    infoWindow.setContent(infoWindowContent);
                 }
-                infoWindow.setContent(infoWindowContent);
+
             },
             error: function (data) {
-                infoWindowContent = '<p>Ooops, no data could be found.</p>';
+                infoWindowContent = '<p>Ooops, something went wrong. Please try again later.</p>';
                 infoWindow.setContent(infoWindowContent);
 
             }
-        })
+        });
         return false;
     };
 

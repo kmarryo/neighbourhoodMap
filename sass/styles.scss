@@ -3,7 +3,6 @@ $background-color-primary: #c2d6d6;
 $heading-font: 'Days One', sans-serif;
 $standard-font: 'Rock Salt', cursive;
 
-
 /// GENERAL
 * {
   box-sizing: border-box;
@@ -14,6 +13,7 @@ html, body {
   margin: 0;
   padding: 0;
 }
+
 body {
   background-color: $background-color-primary;
 }
@@ -27,7 +27,6 @@ body {
     height: 50vh;
   }
 }
-
 
 //// MAIN HEADING (h1 Auxburg)
 .heading {
@@ -56,9 +55,10 @@ body {
     width: 75%;
     margin: 2rem auto;
     text-align: center;
+    padding-left: 0;
     li {
       display: inline-block;
-      padding-right: 2rem;
+      padding-right: 0;
       padding-bottom: 2rem;
       line-height: 1.75rem;
       &:hover {
@@ -71,7 +71,7 @@ body {
     margin-top: 0;
     padding-top: 1.5rem;
     text-align: center;
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
   input {
     margin: 0 auto;
@@ -80,13 +80,7 @@ body {
   }
 }
 
-
-
 /* Helper Rules */
-
-
-
-
 
 /************
 MEDIA QUERIES
@@ -104,7 +98,7 @@ MEDIA QUERIES
     .aux {
       display: inline-block;
       position: absolute;
-      top: 490px;
+      top: 200px;
       left: -60px;
     }
     .burg {
@@ -115,15 +109,14 @@ MEDIA QUERIES
 
   /// MAP
   .map-section {
-    width: 80%;
+    width: 100%;
     #map {
       margin-left: 120px;
       margin-top: 20px;
       height: calc(100vh - 120px);
+      width: 80%;
     }
   }
-
-
 
   //// SEARCH ///
   .search-box {
@@ -133,8 +126,6 @@ MEDIA QUERIES
     top: 0;
     right: 0;
   }
-
-
 
   /* Helper Rules */
   .rotate {
@@ -157,13 +148,4 @@ MEDIA QUERIES
     filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 
   }
-
-  //@media only screen and (max-width: 1274px) {
-  //  .map-section {
-  //    #map {
-  //      max-width: 800px;
-  //    }
-  //  }
-  //}
-
 }

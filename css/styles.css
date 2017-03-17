@@ -50,11 +50,12 @@ body {
   width: 75%;
   margin: 2rem auto;
   text-align: center;
+  padding-left: 0;
 }
 
 .search-box .search-results li {
   display: inline-block;
-  padding-right: 2rem;
+  padding-right: 0;
   padding-bottom: 2rem;
   line-height: 1.75rem;
 }
@@ -68,7 +69,7 @@ body {
   margin-top: 0;
   padding-top: 1.5rem;
   text-align: center;
-  font-size: 2.5rem;
+  font-size: 2rem;
 }
 
 .search-box input {
@@ -93,7 +94,7 @@ MEDIA QUERIES
   .heading .aux {
     display: inline-block;
     position: absolute;
-    top: 490px;
+    top: 200px;
     left: -60px;
   }
   .heading .burg {
@@ -101,12 +102,13 @@ MEDIA QUERIES
     left: 115px;
   }
   .map-section {
-    width: 80%;
+    width: 100%;
   }
   .map-section #map {
     margin-left: 120px;
     margin-top: 20px;
     height: calc(100vh - 120px);
+    width: 80%;
   }
   .search-box {
     position: absolute;

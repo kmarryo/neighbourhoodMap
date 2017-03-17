@@ -6,33 +6,36 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Augsburg Neighbourhood Map</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"/>
     <link href="https://fonts.googleapis.com/css?family=Days+One|Rock+Salt" rel="stylesheet">
     <link rel="stylesheet" href="css/dist/styles-dist.css">
 </head>
 <body>
-<section class="map-section">
-<div class="heading"><h1><span class="aux rotate">Aux</span><span class="burg">burg</span></h1></div>
+<main>
+    <section class="map-section">
+        <div class="heading"><h1><span class="aux rotate">Aux</span><span class="burg">burg</span></h1></div>
 
-<div id="map"></div>
-</section>
-<section class="search-section">
+        <div id="map"></div>
+    </section>
+    <section class="search-section">
 
-<div class="search-box">
-    <h3>Search:</h3>
-<input type="text" data-bind="value: filter, valueUpdate: 'afterkeydown'" placeholder="Search...">
-    <ul class="search-results" data-bind="foreach: filteredItems">
-        <li data-bind="text: name, click: PinIsClicked"></li>
-    </ul>
-</div>
-</section>
+        <div class="search-box">
+            <h3>Search:</h3>
+            <input type="text" data-bind="value: filter, valueUpdate: 'afterkeydown'" placeholder="Search...">
+            <ul class="search-results" data-bind="foreach: filteredItems">
+                <li data-bind="text: name, click: PinIsClicked"></li>
+            </ul>
+        </div>
+    </section>
+</main>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="js/knockout.js"></script>
-<script src="js/markers.js"></script>
+<script src="js/dist/app-dist.js"></script>
 
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYBvG6EFg7PrPKo7yo_VP3NWRd-3C-Bho&callback=initMap" onerror="mapsError"></script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYBvG6EFg7PrPKo7yo_VP3NWRd-3C-Bho&callback=initMap"
+        onerror="mapsError()"></script>
 
 </body>
 </html>
