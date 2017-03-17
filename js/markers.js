@@ -149,6 +149,8 @@ function initMap() {
     //// Wikipedia API: Populates infoWindow of pins
     Pin.prototype.loadWikiArticles = function () {
         var self = this;
+        var infoWindowContent = '<h2>' + self.name() + '</h2>';
+
         // Wikipedia API
         // To change between normal search for terms and geosearch change list to "geosearch" and uncomment the lines gscoord and gsradius
         $.ajax({
@@ -164,8 +166,8 @@ function initMap() {
                 format: 'json'
             },
             success: function (data) {
+
                 var wikiResults = data.query.search;
-                var infoWindowContent = '<h2>' + self.name() + '</h2>';
                 // Loop through wikipedia results and create paragraphs with the wiki articles inside infoWindow
                 // For better usability I reduced the number of articles to 3. To show more, it can be of course replaced by wikiResults.length
                 for (var i = 0; i < 3; i++) {
@@ -174,10 +176,13 @@ function initMap() {
                     infoWindowContent += '<p>' + '<a href="' + url + '">' + wikiArticle.title + '</a></p>';
                 }
                 infoWindow.setContent(infoWindowContent);
+            },
+            error: function (data) {
+                infoWindowContent = '<p>Ooops, no data could be found.</p>';
+                infoWindow.setContent(infoWindowContent);
+
             }
-        }).fail(function () {
-            $('body').text('Ooops, no data could be loaded. Please try again later.');
-        });
+        })
         return false;
     };
 
