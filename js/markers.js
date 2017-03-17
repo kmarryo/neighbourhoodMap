@@ -1,7 +1,9 @@
 "use strict";
 
-// GLOBAL Variables
+//////// GLOBAL Variables
 var map, pins, infoWindow, myViewModel;
+
+// Special stylings for map
 var pinStyles = [{"featureType":"all","elementType":"geometry.fill","stylers":[{"weight":"2.00"}]},{"featureType":"all","elementType":"geometry.stroke","stylers":[{"color":"#9c9c9c"}]},{"featureType":"all","elementType":"labels.text","stylers":[{"visibility":"on"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"landscape","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road","elementType":"geometry.fill","stylers":[{"color":"#eeeeee"}]},{"featureType":"road","elementType":"labels.text.fill","stylers":[{"color":"#7b7b7b"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#46bcec"},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#c8d7d4"}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#070707"}]},{"featureType":"water","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"}]}];
 
 // Function with error message. Gets called in index.html as onerror on Google Maps script-Tag
@@ -10,14 +12,14 @@ function mapsError() {
 }
 
 
-// Google Maps API function for initializing the map
+//////// Google Maps API function for initializing the map
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 48.369826, lng: 10.8969703},
         zoom: 13,
         styles: pinStyles
     });
-    // Create new and empty infoWindow. Gets populated with content under Pin.prototype.loadWikiArticles
+    // Create new empty infoWindow. Gets populated with content under Pin.prototype.loadWikiArticles
     infoWindow = new google.maps.InfoWindow();
 
     // Gets map responsive so it centers when the window is resized
@@ -26,7 +28,7 @@ function initMap() {
         map.setCenter(centerMap);
     });
 
-// Pin constructor
+/////// Pin constructor (Creates Markers)
 
     var Pin = function (name, lat, lng) {
         var self = this;
@@ -57,24 +59,14 @@ function initMap() {
             self.marker.setAnimation(null);
         }, 700);
 
-        //infoWindow.setContent(this.content + this.loadWikiArticles());
 
         // GMaps API infoWindow: opens infoWindow and fills it with content
-        //infoWindow.setContent(this.content);
         this.loadWikiArticles();
         infoWindow.open(map, this.marker);
 
     }
-    Pin.prototype.toggleShow = function (show) {
-        this.show(show);
-        if (show) {
-            this.marker.setVisible(true);
-        } else {
-            this.marker.setVisible(false);
-        }
-    };
 
-// Knockout JS ViewModel
+////////// Knockout JS ViewModel
     myViewModel = {
         // Create markers (pins) via Pin constructor
         // General structure: new Pin(name, lat, lng)
@@ -103,24 +95,37 @@ function initMap() {
                 return false;
             return string.substring(0, startsWith.length) === startsWith;
         };
+        // Checks for generally matching strings
+        var stringInString = function (string, filterString) {
+            string = string || "";
+            if (filterString.length > string.length)
+                return false;
+            return string.indexOf(filterString) >= 0;
+        };
 
-        // Creating filter, set all letters to lowercase for usability
+        // Creating filter
         var filter = this.filter().toLowerCase();
         if (filter === false) {
             return this.pins();
         } else {
             return ko.utils.arrayFilter(this.pins(), function (pin) {
-                return stringStartsWith(pin.name().toLowerCase(), filter);
+                var stay_visible_by_str_starts = stringStartsWith(pin.name().toLowerCase(), filter);
+                var stay_visible_by_str_in_str = stringInString(pin.name().toLowerCase(), filter);
+                var stay_visible = stay_visible_by_str_starts || stay_visible_by_str_in_str;
+                // Adds or removes markers (visibility) depending on search result
+                pin.marker.setVisible(stay_visible);
+                return stay_visible;
             });
         }
     }, myViewModel);
 
 
 
-    //// API Copy from previous project on gitlab
+    //// Wikipedia API: Populates infoWindow of pins
     Pin.prototype.loadWikiArticles = function () {
         var self = this;
         // Wikipedia API
+        // To change between normal search for terms and geosearch change list to "geosearch" and uncomment the lines gscoord and gsradius
         $.ajax({
             url: "https://de.wikipedia.org/w/api.php?action=opensearch",
             dataType: "jsonp",
@@ -138,6 +143,8 @@ function initMap() {
 
                 var wikiResults = data.query.search;
                 var infoWindowContent = '<h2>' + self.name() + '</h2>';
+                // Loop through wikipedia results and create paragraphs with the wiki articles inside infoWindow
+                // For better usability I reduced the number of articles to 3. To show more, it can be of course replaced by wikiResults.length
                 for (var i = 0; i < 3; i++) {
                     var wikiArticle = wikiResults[i];
                     var url = "http://de.wikipedia.org/wiki/" + wikiArticle.title;
