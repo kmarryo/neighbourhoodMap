@@ -2,9 +2,7 @@
 
 ## TODO
 
-- Neue Marker hinzufügen und mit Content auffüllen
-- CSS-Styling
-- Responsive?
+
 - README
 - Comments in JS Files
 - Minify and concatenate css und js files
@@ -15,4 +13,7 @@
 - Informations-Box für die Marker bei Click
 - Third-party-API mit Infos onclick
 - AJAX fail info
+- Neue Marker hinzufügen und mit Content auffüllen
+- CSS-Styling
+- Responsive?
 
