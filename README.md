@@ -1,4 +1,4 @@
-# Augsburg Neighbourhood Map
+# Augsburg: Interesting Places
 ===============================
 
 ## Description
