@@ -139,8 +139,6 @@ function initMap() {
                 format: "json"
             },
             success: function (data) {
-                console.log('The request was successfully loaded');
-
                 var wikiResults = data.query.search;
                 var infoWindowContent = '<h2>' + self.name() + '</h2>';
                 // Loop through wikipedia results and create paragraphs with the wiki articles inside infoWindow
