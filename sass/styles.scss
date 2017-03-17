@@ -119,7 +119,7 @@ MEDIA QUERIES
     #map {
       margin-left: 120px;
       margin-top: 20px;
-      height: 100vh;
+      height: calc(100vh - 120px);
     }
   }
 

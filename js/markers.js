@@ -53,6 +53,7 @@ function initMap() {
         var self = this;
         // Google Maps API setAnimation function for animating markers on click
         this.marker.setAnimation(google.maps.Animation.BOUNCE);
+        map.panTo(this.marker.getPosition());
 
         // Stops bouncing of marker after 700 ms so that it bounces one time
         setTimeout(function () {
